@@ -23,6 +23,7 @@ struct Stats //struct of stat values
 	string expType;
 };
 
+
 struct IVs //the individual gains of each stat IVs
 {
 	int hp;
@@ -50,6 +51,11 @@ struct Move
 	string flag;
 	string descr; //description of the move
 };
+struct LevelUp
+{
+	bool evolve;
+	Move lvlUpMoves[25];
+};
 
 class Pokemon //creates the pokemon object
 {
@@ -60,13 +66,19 @@ public:
 	IVs ivs;
 	int numMoves;
 	Move moves[4];
+	LevelUp lvlUP;
 	void SetDefValues();
 	void SetBaseValues(string name, string type, int level, int hp, int attack, int Ndefense,int spAttack, int spDefense, int speed, string expCap);
 	void SetIVs();
 	void PrintPokemonInfo();
 
 };
-
+struct Global
+{
+	Move moveList[560];
+	Pokemon pokeDex[151];
+	Pokemon party[6];
+};
 
 
 
