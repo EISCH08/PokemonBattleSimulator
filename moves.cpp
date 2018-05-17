@@ -1,4 +1,3 @@
-#include "pokemon.cpp"
 #include <iostream>
 #include <string>
 #include <map>
@@ -126,7 +125,7 @@ Global CreateMoveList(Global source) //creates a deck with all the possible move
 		
 }
 		
-		
+		return source;
 		
 	
 
