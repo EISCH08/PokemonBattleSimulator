@@ -116,7 +116,19 @@ Global DexCreation(Global source) //creates the pokedex
 				{
 					size_t fix= line.find("=");
 					string output = line.substr(fix+1);
-					newPokemon.pokeDex = output;
+					newPokemon.pokedex = output;
+				}
+				if(!line.find("BaseEXP="))
+				{
+					size_t fix= line.find("=");
+					string output = line.substr(fix+1);
+					newPokemon.stats.expB = stoi(output);
+				}
+				if(!line.find("GrowthRate="))
+				{
+					size_t fix= line.find("=");
+					string output = line.substr(fix+1);
+					newPokemon.stats.expGrowth = output;
 				}
 				if(!line.find("Evolutions="))
 				{
@@ -146,7 +158,7 @@ Global DexCreation(Global source) //creates the pokedex
 				
 				if(!line.find("#--")) //create a new slot 
 				{
-					source.pokeDex[index] = newPokemon;
+					source.pokedex[index] = newPokemon;
 					index++;
 					Pokemon newPokemon;
 				}

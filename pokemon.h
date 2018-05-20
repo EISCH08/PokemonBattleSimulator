@@ -2,6 +2,9 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <math.h>
+#include <cmath>
+#include <array>
 using namespace std;
 
 struct Stats //struct of stat values
@@ -20,7 +23,8 @@ struct Stats //struct of stat values
 	int speedB;
 	int exp;
 	int level;
-	string expType;
+	string expGrowth;
+	int expB =0;
 };
 
 
@@ -66,10 +70,10 @@ public:
 	string nameInternal;
 	string type1;
 	string type2;
-	string pokeDex;
+	string pokedex;
 	Stats stats;
 	IVs ivs;
-	int numMoves;
+	int numMoves =0;
 	int learnMoveLvl[25];
 	string learnMoveMove[25];
 	Move moves[4];
@@ -78,46 +82,33 @@ public:
 	string evolution;
 	LevelUp lvlUP;
 	void SetDefValues();
+	void SetStats();
+	void SetExp(int slow[], int medFast[], int medSlow[], int fast[]);
 	void SetBaseValues(string name, string type, int level, int hp, int attack, int Ndefense,int spAttack, int spDefense, int speed, string expCap);
 	void SetIVs();
+	void SetExp();
+	void AssignMoves(Move moveList[]);
 	void PrintPokemonInfo();
 
 };
-struct Global
+class Global
 {
+public:
 	Move moveList[560];
-	Pokemon pokeDex[151];
+	Pokemon pokedex[151];
 	Pokemon party[6];
+	int fast[100];
+	int medFast[100];
+	int medSlow[100];
+	int slow[100];
+	int verySlow[100];
+	void SetExpRanges();
 };
 
 
 
-void Pokemon::SetDefValues() //sets the default values of a pokemon when created
-{
-	stats.level = 1;
-	stats.hp = stats.hpB;
-	stats.attack = stats.attackB;
-	stats.defense = stats.defenseB;
-	stats.spAttack = stats.spAttackB;
-	stats.spDefense = stats.spDefenseB;
-	stats.speed = stats.speedB;
-	stats.expType = "NULL";
-	stats.exp = 0;
-}
 
-void Pokemon::SetBaseValues(string Nname, string Ntype, int Nlevel, int Nhp, int Nattack,int Ndefense, int NspAttack, int NspDefense, int Nspeed, string NexpCap) //sets the base values for a pokemon
-{
-	name = Nname;
-	type1 = Ntype;
-	stats.hpB = Nhp;
-	stats.level = Nlevel;
-	stats.attackB = Nattack;
-	stats.defenseB = Ndefense;
-	stats.spAttackB = NspAttack;
-	stats.spDefenseB = NspDefense;
-	stats.speedB = Nspeed;
-	stats.expType = NexpCap;
-}
+
 void Pokemon::SetIVs() //assigns IV values
 {
 	ivs.hp = (rand() % 15);
@@ -128,6 +119,16 @@ void Pokemon::SetIVs() //assigns IV values
 	ivs.speed = (rand() % 15);
 }
 
+void Pokemon::SetStats()
+{
+	int level = stats.level;
+	stats.attack = floor(floor((2 * stats.attackB + ivs.attack)*level/100 +5));
+	stats.defense = floor(floor((2 * stats.defenseB + ivs.defense)*level/100 +5));
+	stats.spAttack = floor(floor((2 * stats.spAttackB + ivs.spAttack)*level/100 +5));
+	stats.spDefense = floor(floor((2 * stats.spDefenseB + ivs.spDefense)*level/100 +5));
+	stats.speed = floor(floor((2 * stats.speedB + ivs.speed)*level/100 +5)*5);
+	stats.hp = floor((2 * stats.hpB + ivs.hp)*level/100 +level + 10);
+}
 void Pokemon::PrintPokemonInfo() //prints out pokemon information
 {
 	cout<<"Name: "<<name <<endl;
@@ -145,17 +146,92 @@ void Pokemon::PrintPokemonInfo() //prints out pokemon information
 	cout <<"Sp.Attack IV: "<<ivs.spAttack <<endl;
 	cout<<"Sp.Defense IV: "<<ivs.spDefense <<endl;
 	cout<<"Speed IV: " <<ivs.speed <<endl;
-	cout<<"Exp Type: "<<stats.expType<<endl;
+	cout<<"Move 1: " <<moves[0].nameInternal<<endl;
+	cout<<"Move 2: " <<moves[1].nameInternal<<endl;
+	cout<<"Move 3: " <<moves[2].nameInternal<<endl;
+	cout<<"Move 4: " <<moves[3].nameInternal<<endl;
+	cout<<"Exp Growth: "<<stats.expGrowth<<endl;
+	cout<<"Base Exp: " <<stats.expB<<endl;
 	cout<<"Current Exp: " <<stats.exp<<endl;
 
 }
 
-Pokemon CreatePokemon(string Nname, string Ntype, int Nlevel, int Nhp, int Nattack,int Ndefense, int NspAttack, int NspDefense, int Nspeed, string NexpCap) //creates a pokemon
+Move FindMove(Move moveList[], string moveName)
 {
-	Pokemon newPokemon;
-	newPokemon.SetBaseValues(Nname,Ntype,Nlevel,Nhp,Nattack,Ndefense,NspAttack,NspDefense,Nspeed,NexpCap);
-	newPokemon.SetDefValues();
-	newPokemon.SetIVs();
-	newPokemon.PrintPokemonInfo();
-	return newPokemon;
+	int i = 0;
+	while(moveList[i].nameInternal != moveName && i<559)
+	{
+		i++;
+	}
+	Move move = moveList[i];
+	return move;
+
+}
+
+void Pokemon::AssignMoves(Move moveList[])//assigns moves to pokemon based on 4 most recently learned moves
+{
+	int level = stats.level;
+
+	int levelIndex = 0;
+
+	while(level >= learnMoveLvl[levelIndex] && learnMoveLvl[levelIndex] >= learnMoveLvl[levelIndex-1]) //finds which index the level limit reaches
+	{
+		levelIndex++;
+	}
+	if(levelIndex<4)
+		{
+			int track = levelIndex;
+			while(track<4)
+			{
+				Move emptyMove;
+				moves[track] = emptyMove;
+				track++;
+			}	
+		}
+
+	while(levelIndex >=0 && numMoves <4)
+	{
+
+		Move move = FindMove(moveList,learnMoveMove[levelIndex-1]);
+		
+		moves[numMoves] = move;
+		levelIndex--;
+		numMoves++;
+	}
+
+
+
+}
+
+void Pokemon::SetExp(int slow[], int medFast[], int medSlow[], int fast[])
+{
+	if(stats.expGrowth == "Fast")
+	{
+		stats.exp = fast[stats.level - 1];
+	}
+	if(stats.expGrowth == "Slow")
+	{
+		stats.exp = slow[stats.level - 1];
+	}
+	if(stats.expGrowth == "Parabolic")
+	{
+		cout<<"in here"<<endl;
+		stats.exp = medSlow[stats.level - 1];
+		cout<<stats.exp<<endl;
+	}
+	if(stats.expGrowth == "Medium")
+	{
+		stats.exp = medFast[stats.level - 1];
+	}
+}
+
+void Global::SetExpRanges()
+{
+	for(int i =1; i<=100; i++)
+	{
+		slow[i-1] = (5*pow(i,3))/4;
+		fast[i-1] = (4*pow(i,3))/5;
+		medFast[i-1] = pow(i,3);
+		medSlow[i-1] = ((1.2*pow(i,3)) - (15 * pow(i,2)) + 100*i - 140);
+	}
 }

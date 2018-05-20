@@ -5,26 +5,7 @@
 #include<sstream>
 using namespace std;
 Global source;
-Move CreateMove(int id,string nameInternal,string nameDisplay,int function,int power,string type, int category, int accuracy, int pp, int target,int priority, int addEffectChance, string flag, string descr)
-{
-	Move newMove;
-	newMove.id = id;
-	newMove.nameInternal = nameInternal;
-	newMove.nameDisplay=nameDisplay;
-	newMove.functionCode = function;
-	newMove.power = power;
-	newMove.type = type;
-	newMove.category = category;
-	newMove.accuracy = accuracy;
-	newMove.pp = pp;
-	newMove.target = target;
-	newMove.priority = priority;
-	newMove.addEffectChance= addEffectChance;
-	newMove.flag = flag;
-	newMove.descr = descr;
 
-	return newMove;
-}
  //stores all
 Global CreateMoveList(Global source) //creates a deck with all the possible moves
 {
