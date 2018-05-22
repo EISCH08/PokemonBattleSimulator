@@ -74,15 +74,15 @@ Global DexCreation(Global source) //creates the pokedex
 						}
 						if(countN == 3)
 						{
-							newPokemon.stats.spAttackB = stoi(data);
+							newPokemon.stats.speedB = stoi(data);
 						}
 						if(countN == 4)
 						{
-							newPokemon.stats.spDefenseB = stoi(data);
+							newPokemon.stats.spAttackB = stoi(data);
 						}
 						if(countN == 5)
 						{
-							newPokemon.stats.speedB = stoi(data);
+							newPokemon.stats.spDefenseB = stoi(data);
 						}
 						countN++;		
 					}
