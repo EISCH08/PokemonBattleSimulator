@@ -81,6 +81,7 @@ public:
 	string evolveType;
 	string evolution;
 	LevelUp lvlUP;
+	string status; //fainted, asleep, burned ...
 	void SetDefValues();
 	void SetStats();
 	void SetExp(int slow[], int medFast[], int medSlow[], int fast[]);
@@ -111,12 +112,12 @@ public:
 
 void Pokemon::SetIVs() //assigns IV values
 {
-	ivs.hp = (rand() % 15);
-	ivs.attack = (rand() % 15);
-	ivs.defense = (rand() % 15);
-	ivs.spAttack = (rand() % 15);
-	ivs.spDefense = (rand() % 15);
-	ivs.speed = (rand() % 15);
+	ivs.hp = (rand() % 31);
+	ivs.attack = (rand() % 31);
+	ivs.defense = (rand() % 31);
+	ivs.spAttack = (rand() % 31);
+	ivs.spDefense = (rand() % 31);
+	ivs.speed = (rand() % 31);
 }
 
 void Pokemon::SetStats()
@@ -126,7 +127,7 @@ void Pokemon::SetStats()
 	stats.defense = floor(floor((2 * stats.defenseB + ivs.defense)*level/100 +5));
 	stats.spAttack = floor(floor((2 * stats.spAttackB + ivs.spAttack)*level/100 +5));
 	stats.spDefense = floor(floor((2 * stats.spDefenseB + ivs.spDefense)*level/100 +5));
-	stats.speed = floor(floor((2 * stats.speedB + ivs.speed)*level/100 +5)*5);
+	stats.speed = floor(floor((2 * stats.speedB + ivs.speed)*level/100 +5));
 	stats.hp = floor((2 * stats.hpB + ivs.hp)*level/100 +level + 10);
 }
 void Pokemon::PrintPokemonInfo() //prints out pokemon information
@@ -140,6 +141,12 @@ void Pokemon::PrintPokemonInfo() //prints out pokemon information
 	cout <<"Sp.Attack: "<<stats.spAttack <<endl;
 	cout<<"Sp.Defense: "<<stats.spDefense <<endl;
 	cout<<"Speed: " <<stats.speed <<endl;
+	// cout <<"HP: "<<stats.hpB<<endl;
+	// cout<<"Attack: "<<stats.attackB <<endl;
+	// cout<<"Defense: "<<stats.defenseB <<endl;
+	// cout <<"Sp.Attack: "<<stats.spAttackB <<endl;
+	// cout<<"Sp.Defense: "<<stats.spDefenseB <<endl;
+	// cout<<"Speed: " <<stats.speedB <<endl;
 	cout <<"HP IV: "<<ivs.hp<<endl;
 	cout<<"Attack IV: "<<ivs.attack <<endl;
 	cout<<"Defense IV: "<<ivs.defense <<endl;
@@ -150,9 +157,9 @@ void Pokemon::PrintPokemonInfo() //prints out pokemon information
 	cout<<"Move 2: " <<moves[1].nameInternal<<endl;
 	cout<<"Move 3: " <<moves[2].nameInternal<<endl;
 	cout<<"Move 4: " <<moves[3].nameInternal<<endl;
-	cout<<"Exp Growth: "<<stats.expGrowth<<endl;
-	cout<<"Base Exp: " <<stats.expB<<endl;
-	cout<<"Current Exp: " <<stats.exp<<endl;
+	// cout<<"Exp Growth: "<<stats.expGrowth<<endl;
+	// cout<<"Base Exp: " <<stats.expB<<endl;
+	// cout<<"Current Exp: " <<stats.exp<<endl;
 
 }
 
@@ -215,9 +222,8 @@ void Pokemon::SetExp(int slow[], int medFast[], int medSlow[], int fast[])
 	}
 	if(stats.expGrowth == "Parabolic")
 	{
-		cout<<"in here"<<endl;
+		
 		stats.exp = medSlow[stats.level - 1];
-		cout<<stats.exp<<endl;
 	}
 	if(stats.expGrowth == "Medium")
 	{
