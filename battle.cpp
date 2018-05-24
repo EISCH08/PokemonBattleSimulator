@@ -226,3 +226,100 @@ double DamageCalc(Pokemon attPoke, Move move, Pokemon defPoke)
 	}
 	return damage;
 }
+
+void BattleUI(Pokemon pokemon1, Pokemon pokemon2,int pageState) //prints the UI for the battle
+{
+	cout<<pokemon2.nameInternal<<" Lv"<<pokemon2.stats.level<<endl<<"HP:"<<pokemon2.stats.hpCur<<"/"<<pokemon2.stats.hp<<endl; 
+	cout<<endl<<endl<<endl;
+
+	cout<<"					"<<pokemon1.nameInternal<<" Lv"<<pokemon1.stats.level<<endl<<"					HP:"<<pokemon1.stats.hpCur<<"/"<<pokemon1.stats.hp<<endl<<endl;
+	bool mainBattlePage = false, fightPage =false,pokemonPage =false, bagPage =false, runText = false;
+	if(pageState ==0) //mainBattlePage
+	{
+	
+		mainBattlePage = true;
+
+	}
+	if(pageState ==1) //fightPage
+	{
+	
+		fightPage = true;
+
+	}
+	if(pageState ==2) //PokemonPage
+	{
+		pokemonPage =true;
+
+	}
+	if(pageState ==3) //BagPage
+	{
+		bagPage = true;
+
+	}
+	if(pageState ==4) //RunText
+	{
+		runText = true;
+	}
+
+	
+	if(mainBattlePage)
+	{
+		cout<<"What will "<<pokemon1.nameInternal<<" do?"<<endl;
+		cout<<"1:FIGHT 			2:BAG"<<endl<<"3:POKEMON  		    4:RUN"<<endl;
+	}
+	else if(fightPage) //list all of the party pokemon
+	{
+		cout<<"1:"<<pokemon1.moves[0].nameInternal<<" PP: "<<pokemon1.moves[0].ppCur<<"/"<<pokemon1.moves[0].pp<<"  TYPE/"<<pokemon1.moves[0].type<<endl;
+		cout<<"2:"<<pokemon1.moves[1].nameInternal<<" PP: "<<pokemon1.moves[1].ppCur<<"/"<<pokemon1.moves[1].pp<<"  TYPE/"<<pokemon1.moves[1].type<<endl;
+		cout<<"3:"<<pokemon1.moves[2].nameInternal<<" PP: "<<pokemon1.moves[2].ppCur<<"/"<<pokemon1.moves[2].pp<<"  TYPE/"<<pokemon1.moves[2].type<<endl;
+		cout<<"4:"<<pokemon1.moves[3].nameInternal<<" PP: "<<pokemon1.moves[3].ppCur<<"/"<<pokemon1.moves[3].pp<<"  TYPE/"<<pokemon1.moves[3].type<<endl;
+		cout<<"5:BACK"<<endl;
+
+
+	}
+	else if(pokemonPage) //list all of the party pokemon
+	{
+		cout<<"Work in progress"<<endl;
+	}
+	else if(bagPage) //list all of the party pokemon
+	{
+		cout<<"Work in progress"<<endl;
+	}
+	else if(runText) //list all of the party pokemon 
+	{
+		cout<<"Work in progress"<<endl;
+	}
+	
+}
+
+void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (trainer battle atm)
+{
+	bool run = false; //trainer decides to run
+	BattleUI(pokemon1,pokemon2,0);
+	while(pokemon1.stats.hp > 0 || pokemon2.stats.hp >0 || run ==true) //while both pokemon are alive
+	{
+		bool first = true; //user pokemone goes first
+		int userInput;
+		cin>>userInput;
+		if(pokemon1.stats.speed > pokemon2.stats.speed) //decide which pokemon gets to move first
+		{
+			first = true;
+		}
+		else if(pokemon1.stats.speed < pokemon2.stats.speed)
+		{
+			first = false; //other pokemon moves first
+		}
+		else //speed tie
+		{
+			int chance = (rand() %10);
+			if(chance<6)
+			{
+				first = true;
+			}
+			else
+			{
+				first = false;
+			}
+		}
+	}
+}

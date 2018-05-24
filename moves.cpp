@@ -75,6 +75,7 @@ Global CreateMoveList(Global source) //creates a deck with all the possible move
 				else if(count ==8)
 				{
 					newMove.pp = stoi(data);
+					newMove.ppCur = newMove.pp;
 				}
 				else if(count ==9)
 				{

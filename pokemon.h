@@ -9,7 +9,8 @@ using namespace std;
 
 struct Stats //struct of stat values
 {
-	int hp;
+	int hp; //max hp
+	int hpCur; //current HP
 	int attack;
 	int defense;
 	int spAttack;
@@ -24,7 +25,7 @@ struct Stats //struct of stat values
 	int exp;
 	int level;
 	string expGrowth;
-	int expB =0;
+	int expB;
 };
 
 
@@ -49,6 +50,7 @@ struct Move
 	int category; //0 = physical; 1 = special; 2 = status
 	int accuracy;
 	int pp;
+	int ppCur;
 	int addEffectChance;
 	int target; //0 = single target, 1 = self, 2 = nothing
 	int priority; //0 - 6
@@ -73,7 +75,7 @@ public:
 	string pokedex;
 	Stats stats;
 	IVs ivs;
-	int numMoves =0;
+	int numMoves;
 	int learnMoveLvl[25];
 	string learnMoveMove[25];
 	Move moves[4];
@@ -131,6 +133,8 @@ void Pokemon::SetStats()
 	stats.spDefense = floor(floor((2 * stats.spDefenseB + ivs.spDefense)*level/100 +5));
 	stats.speed = floor(floor((2 * stats.speedB + ivs.speed)*level/100 +5));
 	stats.hp = floor((2 * stats.hpB + ivs.hp)*level/100 +level + 10);
+	stats.hpCur = stats.hp;
+	stats.expB = 0;
 }
 void Pokemon::PrintPokemonInfo() //prints out pokemon information
 {

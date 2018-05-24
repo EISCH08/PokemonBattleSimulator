@@ -20,17 +20,9 @@ int main(int argc, char const *argv[])
 	
 	pokemon1 = CreatePokemon(6, 15, main.pokedex, main.moveList, main.slow, main.medFast, main.medSlow, main.fast);
 	pokemon2 = CreatePokemon(9, 15, main.pokedex, main.moveList, main.slow, main.medFast, main.medSlow, main.fast);
-	pokemon1.PrintPokemonInfo();
-	pokemon2.PrintPokemonInfo();
-	hello = DamageCalc(pokemon2,pokemon2.moves[0], pokemon1);
-	cout<<hello<<endl;
-	//cout<<pikachu.learnMoveLvl[14]<<endl;
-	//cout<<main.moveList[0].nameInternal<<endl;
-	
+	//pokemon1.PrintPokemonInfo();
+	//pokemon2.PrintPokemonInfo();
+	Battle(pokemon1,pokemon2);
 
-
-
-
-	
 	return 0;
 } 
