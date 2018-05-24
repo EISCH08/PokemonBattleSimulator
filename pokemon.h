@@ -85,7 +85,7 @@ public:
 	void SetDefValues();
 	void SetStats();
 	void SetExp(int slow[], int medFast[], int medSlow[], int fast[]);
-	void SetBaseValues(string name, string type, int level, int hp, int attack, int Ndefense,int spAttack, int spDefense, int speed, string expCap);
+	//void SetBaseValues(string name, string type, int level, int hp, int attack, int Ndefense,int spAttack, int spDefense, int speed, string expCap);
 	void SetIVs();
 	void SetExp();
 	void AssignMoves(Move moveList[]);
@@ -104,6 +104,8 @@ public:
 	int slow[100];
 	int verySlow[100];
 	void SetExpRanges();
+	Global();
+	//~Global();
 };
 
 
@@ -147,12 +149,12 @@ void Pokemon::PrintPokemonInfo() //prints out pokemon information
 	// cout <<"Sp.Attack: "<<stats.spAttackB <<endl;
 	// cout<<"Sp.Defense: "<<stats.spDefenseB <<endl;
 	// cout<<"Speed: " <<stats.speedB <<endl;
-	cout <<"HP IV: "<<ivs.hp<<endl;
-	cout<<"Attack IV: "<<ivs.attack <<endl;
-	cout<<"Defense IV: "<<ivs.defense <<endl;
-	cout <<"Sp.Attack IV: "<<ivs.spAttack <<endl;
-	cout<<"Sp.Defense IV: "<<ivs.spDefense <<endl;
-	cout<<"Speed IV: " <<ivs.speed <<endl;
+	// cout <<"HP IV: "<<ivs.hp<<endl;
+	// cout<<"Attack IV: "<<ivs.attack <<endl;
+	// cout<<"Defense IV: "<<ivs.defense <<endl;
+	// cout <<"Sp.Attack IV: "<<ivs.spAttack <<endl;
+	// cout<<"Sp.Defense IV: "<<ivs.spDefense <<endl;
+	// cout<<"Speed IV: " <<ivs.speed <<endl;
 	cout<<"Move 1: " <<moves[0].nameInternal<<endl;
 	cout<<"Move 2: " <<moves[1].nameInternal<<endl;
 	cout<<"Move 3: " <<moves[2].nameInternal<<endl;
@@ -195,7 +197,7 @@ void Pokemon::AssignMoves(Move moveList[])//assigns moves to pokemon based on 4 
 				track++;
 			}	
 		}
-
+		numMoves = 0;
 	while(levelIndex >=0 && numMoves <4)
 	{
 
@@ -240,4 +242,9 @@ void Global::SetExpRanges()
 		medFast[i-1] = pow(i,3);
 		medSlow[i-1] = ((1.2*pow(i,3)) - (15 * pow(i,2)) + 100*i - 140);
 	}
+}
+Global::Global()
+{
+	SetExpRanges();
+	
 }

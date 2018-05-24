@@ -17,11 +17,12 @@ int main(int argc, char const *argv[])
 	
 	main = CreateMoveList(main);
 	main = DexCreation(main);
-	main.SetExpRanges();
-	pokemon1 = CreatePokemon(6, 50, main);
 	
+	pokemon1 = CreatePokemon(6, 15, main.pokedex, main.moveList, main.slow, main.medFast, main.medSlow, main.fast);
+	pokemon2 = CreatePokemon(9, 15, main.pokedex, main.moveList, main.slow, main.medFast, main.medSlow, main.fast);
 	pokemon1.PrintPokemonInfo();
-	hello = DamageCalc(pokemon1,pokemon1.moves[1], pokemon1);
+	pokemon2.PrintPokemonInfo();
+	hello = DamageCalc(pokemon2,pokemon2.moves[0], pokemon1);
 	cout<<hello<<endl;
 	//cout<<pikachu.learnMoveLvl[14]<<endl;
 	//cout<<main.moveList[0].nameInternal<<endl;

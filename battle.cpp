@@ -8,14 +8,14 @@ using namespace std;
 
 
 
-Pokemon CreatePokemon(int ID, int level, Global source)//creates a pokemon based off of the pokedex id
+Pokemon CreatePokemon(int ID, int level, Pokemon pokedex[], Move moveList[], int slow[], int medFast[], int medSlow[], int fast[])//creates a pokemon based off of the pokedex id
 {
-	Pokemon newPokemon = source.pokedex[ID-1]; //get the right index related to pokedex #
+	Pokemon newPokemon = pokedex[ID-1]; //get the right index related to pokedex #
 	newPokemon.stats.level = level;
 	newPokemon.SetIVs();
 	newPokemon.SetStats();
 	newPokemon.SetExp(source.slow, source.medFast, source.medSlow, source.fast);
-	newPokemon.AssignMoves(source.moveList);
+	newPokemon.AssignMoves(moveList);
 
 	return newPokemon;
 }
