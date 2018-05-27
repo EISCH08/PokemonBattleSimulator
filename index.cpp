@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
 	main = DexCreation(main);
 	
 	pokemon1 = CreatePokemon(6, 15, main.pokedex, main.moveList, main.slow, main.medFast, main.medSlow, main.fast);
-	pokemon2 = CreatePokemon(9, 15, main.pokedex, main.moveList, main.slow, main.medFast, main.medSlow, main.fast);
+	pokemon2 = CreatePokemon(1, 6, main.pokedex, main.moveList, main.slow, main.medFast, main.medSlow, main.fast);
 	//pokemon1.PrintPokemonInfo();
 	//pokemon2.PrintPokemonInfo();
 	Battle(pokemon1,pokemon2);

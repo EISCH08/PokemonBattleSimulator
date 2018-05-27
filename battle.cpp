@@ -203,7 +203,6 @@ double DamageCalc(Pokemon attPoke, Move move, Pokemon defPoke)
 	// cout<<random<<endl;
 	// cout<<type<<endl;
 
-	cout<<modifier<<endl;
 	if(move.category == 0) //physical move
 	{
 		damage = ((2*level)/5)+2;
@@ -269,6 +268,7 @@ void BattleUI(Pokemon pokemon1, Pokemon pokemon2,int pageState) //prints the UI 
 	}
 	else if(fightPage) //list all of the party pokemon
 	{
+		cout<<"				MOVES"<<endl;
 		cout<<"1:"<<pokemon1.moves[0].nameInternal<<" PP: "<<pokemon1.moves[0].ppCur<<"/"<<pokemon1.moves[0].pp<<"  TYPE/"<<pokemon1.moves[0].type<<endl;
 		cout<<"2:"<<pokemon1.moves[1].nameInternal<<" PP: "<<pokemon1.moves[1].ppCur<<"/"<<pokemon1.moves[1].pp<<"  TYPE/"<<pokemon1.moves[1].type<<endl;
 		cout<<"3:"<<pokemon1.moves[2].nameInternal<<" PP: "<<pokemon1.moves[2].ppCur<<"/"<<pokemon1.moves[2].pp<<"  TYPE/"<<pokemon1.moves[2].type<<endl;
@@ -294,14 +294,9 @@ void BattleUI(Pokemon pokemon1, Pokemon pokemon2,int pageState) //prints the UI 
 
 void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (trainer battle atm)
 {
-	bool run = false; //trainer decides to run
+	bool run = false,first =false; //trainer decides to run
 	BattleUI(pokemon1,pokemon2,0);
-	while(pokemon1.stats.hp > 0 || pokemon2.stats.hp >0 || run ==true) //while both pokemon are alive
-	{
-		bool first = true; //user pokemone goes first
-		int userInput;
-		cin>>userInput;
-		if(pokemon1.stats.speed > pokemon2.stats.speed) //decide which pokemon gets to move first
+	if(pokemon1.stats.speed > pokemon2.stats.speed) //decide which pokemon gets to move first
 		{
 			first = true;
 		}
@@ -321,5 +316,75 @@ void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (traine
 				first = false;
 			}
 		}
+	while((pokemon1.stats.hpCur > 0 && pokemon2.stats.hpCur >0) && run !=true) //while both pokemon are alive
+	{
+		bool first = true; //user pokemone goes first
+		int userInput;
+		cin>>userInput;
+
+		switch(userInput)
+		{
+			case 1: //fight UI
+			BattleUI(pokemon1,pokemon2,userInput);
+			int moveNum;
+			cin>>moveNum;
+			switch(moveNum)
+			{
+				case 1:
+
+				case 2:
+
+				case 3: 
+
+				case 4:
+
+				pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum], pokemon2);
+				cout<<pokemon1.name<<" USED "<<pokemon1.moves[moveNum].nameInternal<<endl;
+				break;
+				case 5:
+
+				default:
+				cout<<"not a valid input"<<endl;
+			}
+			
+			break;
+
+			case 2: //pokemon page
+			BattleUI(pokemon1,pokemon2,userInput);
+			break;
+
+			case 3: //bag
+			BattleUI(pokemon1,pokemon2,userInput);
+			break;
+
+			case 4: //run
+			BattleUI(pokemon1,pokemon2,userInput);
+			if(first)
+			{
+				cout<<"ran"<<endl;
+				run==true;
+				break;
+			}
+			else
+			{
+				cout<<"failed to run away"<<endl;
+			}
+			break;
+
+			default:
+			cout<<"not an option"<<endl;
+		}
+		
 	}
+	if(run)
+	{
+		cout<<"Successfully fled from battle"<<endl;
+		return;
+	}
+	else
+	{
+		cout<<"FAINTED"<<endl;
+		return;
+	}
+	
 }
