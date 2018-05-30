@@ -285,10 +285,6 @@ void BattleUI(Pokemon pokemon1, Pokemon pokemon2,int pageState) //prints the UI 
 	{
 		cout<<"Work in progress"<<endl;
 	}
-	else if(runText) //list all of the party pokemon 
-	{
-		cout<<"Work in progress"<<endl;
-	}
 	
 }
 
@@ -316,11 +312,12 @@ void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (traine
 				first = false;
 			}
 		}
+		int userInput;
+		cin>>userInput;
 	while((pokemon1.stats.hpCur > 0 && pokemon2.stats.hpCur >0) && run !=true) //while both pokemon are alive
 	{
 		bool first = true; //user pokemone goes first
-		int userInput;
-		cin>>userInput;
+		
 
 		switch(userInput)
 		{
@@ -331,18 +328,27 @@ void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (traine
 			switch(moveNum)
 			{
 				case 1:
+				cout<<pokemon1.name<<" USED "<<pokemon1.moves[moveNum-1].nameInternal<<endl;
+				pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum-1], pokemon2);
+				break;
 
 				case 2:
+				cout<<pokemon1.name<<" USED "<<pokemon1.moves[moveNum-1].nameInternal<<endl;
+				pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum-1], pokemon2);
+				break;
 
 				case 3: 
+				cout<<pokemon1.name<<" USED "<<pokemon1.moves[moveNum-1].nameInternal<<endl;
+				pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum-1], pokemon2);
+				break;
 
 				case 4:
-
-				pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum], pokemon2);
-				cout<<pokemon1.name<<" USED "<<pokemon1.moves[moveNum].nameInternal<<endl;
+				cout<<pokemon1.name<<" USED "<<pokemon1.moves[moveNum-1].nameInternal<<endl;
+				pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum-1], pokemon2);
 				break;
 				case 5:
-
+				BattleUI(pokemon1,pokemon2,0);
+				cin>>userInput;
 				default:
 				cout<<"not a valid input"<<endl;
 			}
@@ -350,19 +356,21 @@ void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (traine
 			break;
 
 			case 2: //pokemon page
-			BattleUI(pokemon1,pokemon2,userInput);
+			cout<<"Work in progress"<<endl;
+			cin>>userInput;
+			//BattleUI(pokemon1,pokemon2,userInput);
 			break;
 
 			case 3: //bag
-			BattleUI(pokemon1,pokemon2,userInput);
+			cout<<"Work in progress"<<endl;
+			cin>>userInput;
 			break;
 
 			case 4: //run
 			BattleUI(pokemon1,pokemon2,userInput);
 			if(first)
 			{
-				cout<<"ran"<<endl;
-				run==true;
+				run=true;
 				break;
 			}
 			else
@@ -372,7 +380,7 @@ void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (traine
 			break;
 
 			default:
-			cout<<"not an option"<<endl;
+			cout<<"Not a valid option, please try again"<<endl;
 		}
 		
 	}

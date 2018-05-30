@@ -18,8 +18,12 @@ int main(int argc, char const *argv[])
 	main = CreateMoveList(main);
 	main = DexCreation(main);
 	
-	pokemon1 = CreatePokemon(6, 15, main.pokedex, main.moveList, main.slow, main.medFast, main.medSlow, main.fast);
-	pokemon2 = CreatePokemon(1, 6, main.pokedex, main.moveList, main.slow, main.medFast, main.medSlow, main.fast);
+	pokemon1 = CreatePokemon(6, 35, main.pokedex, main.moveList, main.slow, main.medFast, main.medSlow, main.fast);
+	pokemon2 = CreatePokemon(1, 30, main.pokedex, main.moveList, main.slow, main.medFast, main.medSlow, main.fast);
+	for(int i=0; i<4; i++)
+	{
+		cout<<DamageCalc(pokemon1,pokemon1.moves[i], pokemon2)<<endl;
+	}
 	//pokemon1.PrintPokemonInfo();
 	//pokemon2.PrintPokemonInfo();
 	Battle(pokemon1,pokemon2);
