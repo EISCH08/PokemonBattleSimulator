@@ -55,7 +55,7 @@ struct Move
 	int target; //0 = single target, 1 = self, 2 = nothing
 	int priority; //0 - 6
 	int level;
-	string flag;
+	string flag //other effects the move has;
 	string descr; //description of the move
 };
 struct LevelUp

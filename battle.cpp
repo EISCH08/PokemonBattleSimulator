@@ -226,6 +226,12 @@ double DamageCalc(Pokemon attPoke, Move move, Pokemon defPoke)
 	return damage;
 }
 
+
+Move OpponentBattleAI(Pokemon pokemon1, Pokemon pokemon2, string trainerClass,int turn)//the AI on determining what the AI does in battle
+{
+	//fill
+}
+
 void BattleUI(Pokemon pokemon1, Pokemon pokemon2,int pageState) //prints the UI for the battle
 {
 	cout<<pokemon2.nameInternal<<" Lv"<<pokemon2.stats.level<<endl<<"HP:"<<pokemon2.stats.hpCur<<"/"<<pokemon2.stats.hp<<endl; 
