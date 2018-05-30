@@ -1,0 +1,35 @@
+To do List
+
+X 1. Create basic Objects for pokemon and moves
+X 2. Create the move and PokeDex from the extraction files
+X 3. Create a damage calculation for the battle system
+X 4.Implement a basic battle system
+	-Fighting from both sides
+	-Pokemon switching/party viewing
+	-Bag/item usage
+	X-Ability to run
+5. Item System
+6. Move special effects
+	-look up chart potentially
+7. TrainerBattleAI
+	-Trainer classes
+	-name
+	-party
+	-items
+	-money to give out
+	-habits
+8. User trainer class
+	-name
+	-gender
+	-party
+	-items
+	-badges
+	-id
+	-money
+	-current location
+9. Hubworld
+	-random encounters
+	-interactions to world
+10.Title Screen
+11.Pause Menu
+12.Save states
