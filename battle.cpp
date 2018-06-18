@@ -198,16 +198,20 @@ double DamageCalc(Pokemon attPoke, Move move, Pokemon defPoke)
 	random =random /100;
 	STAB = STABCalc(move.type, attPoke);
 	type = EffectivenessCalc(move.type, defPoke);
+	if(type>1 && power > 0)
+	{
+		cout<<"Its super effective!"<<endl;
+	}
+	if(type<1 && power > 0)
+	{
+		cout<<"Its not very effective!"<<endl;
+	}
 	modifier = rainy * sunny * critical * burned * STAB * type;
-	// cout<<power<<endl;
-	// cout<<STAB<<endl;
-	// cout<<random<<endl;
-	// cout<<type<<endl;
 
 	if(move.category == 0) //physical move
 	{
 		damage = ((2*level)/5)+2;
-		damage = damage * power * (attack/defense);
+		damage = damage * power * ((double)attack/(double)defense);
 		damage = (damage /50)+2;
 		damage = damage * modifier;
 		damage = ceil(damage);
@@ -215,7 +219,8 @@ double DamageCalc(Pokemon attPoke, Move move, Pokemon defPoke)
 	if(move.category == 1) //special move
 	{
 		damage = ((2*level)/5)+2;
-		damage = damage * power * (spAttack/spDefense);
+		damage = damage * power;
+		damage = damage * ((double)spAttack/(double)spDefense);
 		damage = (damage /50)+2;
 		damage = damage * modifier;
 		damage = ceil(damage);
@@ -230,15 +235,26 @@ double DamageCalc(Pokemon attPoke, Move move, Pokemon defPoke)
 
 Move OpponentBattleAI(Pokemon pokemon1, Pokemon pokemon2, string trainerClass,int turn)//the AI on determining what the AI does in battle
 {
-	//fill
+	double effectiveness = 0;
+	int index=0;
+	int power = pokemon2.moves[0].power;
+	for(int i=0; i<4; i++) //finds moves that are super effective
+	{
+		double temp = EffectivenessCalc(pokemon2.moves[i].type, pokemon1);
+		if(temp >  effectiveness && pokemon2.moves[i].power > 0)
+		{
+			index = i;
+		}
+	}
+	return pokemon2.moves[index];
 }
 
 void BattleUI(Pokemon pokemon1, Pokemon pokemon2,int pageState) //prints the UI for the battle
 {
-	cout<<pokemon2.nameInternal<<" Lv"<<pokemon2.stats.level<<endl<<"HP:"<<pokemon2.stats.hpCur<<"/"<<pokemon2.stats.hp<<endl; 
+	cout<<pokemon2.nameInternal<<" Lv"<<pokemon2.stats.level<<endl<<pokemon1.status<<" HP:"<<pokemon2.stats.hpCur<<"/"<<pokemon2.stats.hp<<endl; 
 	cout<<endl<<endl<<endl;
 
-	cout<<"					"<<pokemon1.nameInternal<<" Lv"<<pokemon1.stats.level<<endl<<"					HP:"<<pokemon1.stats.hpCur<<"/"<<pokemon1.stats.hp<<endl<<endl;
+	cout<<"					"<<pokemon1.nameInternal<<" Lv"<<pokemon1.stats.level<<endl<<"					"<<pokemon1.status<<" HP:"<<pokemon1.stats.hpCur<<"/"<<pokemon1.stats.hp<<endl<<endl;
 	bool mainBattlePage = false, fightPage =false,pokemonPage =false, bagPage =false, runText = false;
 	if(pageState ==0) //mainBattlePage
 	{
@@ -271,7 +287,7 @@ void BattleUI(Pokemon pokemon1, Pokemon pokemon2,int pageState) //prints the UI 
 	if(mainBattlePage)
 	{
 		cout<<"What will "<<pokemon1.nameInternal<<" do?"<<endl;
-		cout<<"1:FIGHT 			2:BAG"<<endl<<"3:POKEMON  		    4:RUN"<<endl;
+		cout<<"1:FIGHT 			2:BAG"<<endl<<"3:POKEMON  		    	4:RUN"<<endl;
 	}
 	else if(fightPage) //list all of the party pokemon
 	{
@@ -362,6 +378,7 @@ void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (traine
 			
 			break;
 
+
 			case 2: //pokemon page
 			cout<<"Work in progress"<<endl;
 			cin>>userInput;
@@ -389,16 +406,26 @@ void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (traine
 			default:
 			cout<<"Not a valid option, please try again"<<endl;
 		}
+		Move opponentMove = OpponentBattleAI(pokemon1,pokemon2,"BASIC",0);
+		cout<<pokemon2.name<<" USED "<<opponentMove.nameInternal<<endl;
+		pokemon1.stats.hpCur -= DamageCalc(pokemon2, opponentMove, pokemon1);
+
 		
 	}
+	
 	if(run)
 	{
 		cout<<"Successfully fled from battle"<<endl;
 		return;
 	}
-	else
+	else if(pokemon1.stats.hpCur<0)
 	{
-		cout<<"FAINTED"<<endl;
+		cout<<pokemon1.nameInternal<<" FAINTED"<<endl;
+		return;
+	}
+	else if(pokemon2.stats.hpCur<0)
+	{
+		cout<<pokemon2.nameInternal<<" FAINTED"<<endl;
 		return;
 	}
 	
