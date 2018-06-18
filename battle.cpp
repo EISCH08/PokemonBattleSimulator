@@ -243,6 +243,7 @@ Move OpponentBattleAI(Pokemon pokemon1, Pokemon pokemon2, string trainerClass,in
 		double temp = EffectivenessCalc(pokemon2.moves[i].type, pokemon1);
 		if(temp >  effectiveness && pokemon2.moves[i].power > 0)
 		{
+			effectiveness = temp;
 			index = i;
 		}
 	}
