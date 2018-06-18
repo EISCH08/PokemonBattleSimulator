@@ -11,7 +11,7 @@ using namespace std;
 int main(int argc, char const *argv[])
 {	
 	Global main;
-	double hello = 7;
+	double hello = 7;\
 	Pokemon pokemon1;
 	Pokemon pokemon2;
 	

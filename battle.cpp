@@ -12,6 +12,7 @@ Pokemon CreatePokemon(int ID, int level, Pokemon pokedex[], Move moveList[], int
 {
 	Pokemon newPokemon = pokedex[ID-1]; //get the right index related to pokedex #
 	newPokemon.stats.level = level;
+	newPokemon.status = "HEALTHY";
 	newPokemon.SetIVs();
 	newPokemon.SetStats();
 	newPokemon.SetExp(source.slow, source.medFast, source.medSlow, source.fast);

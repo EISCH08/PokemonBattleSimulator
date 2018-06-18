@@ -33,3 +33,4 @@ X 4.Implement a basic battle system
 10.Title Screen
 11.Pause Menu
 12.Save states
+13.Entire game

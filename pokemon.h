@@ -55,7 +55,7 @@ struct Move
 	int target; //0 = single target, 1 = self, 2 = nothing
 	int priority; //0 - 6
 	int level;
-	string flag //other effects the move has;
+	string flag; //other effects the move has;
 	string descr; //description of the move
 };
 struct LevelUp
@@ -83,7 +83,7 @@ public:
 	string evolveType;
 	string evolution;
 	LevelUp lvlUP;
-	string status; //fainted, asleep, burned ...
+	string status; //FAINTED, SLEEP, BURNED ...
 	void SetDefValues();
 	void SetStats();
 	void SetExp(int slow[], int medFast[], int medSlow[], int fast[]);
