@@ -21,6 +21,20 @@ Pokemon CreatePokemon(int ID, int level, Pokemon pokedex[], Move moveList[], int
 	return newPokemon;
 }
 
+Trainer AssignTrainerPokemon(Pokemon pokemon, Trainer trainer) //gives trainers pokemon
+{
+	int index =0;
+	while(trainer.party[index].nameInternal!="NULL" && index < 6) //figures how big the current roster is
+	{
+		index++;
+	}
+	if(index !=6) //too many pokemon in party
+	{
+		trainer.party[index] = pokemon;
+		
+	}
+	return trainer;
+}
 
 double EffectivenessCalc(string moveType, Pokemon pokemon)
 {

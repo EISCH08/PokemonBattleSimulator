@@ -99,7 +99,6 @@ class Global
 public:
 	Move moveList[560];
 	Pokemon pokedex[151];
-	Pokemon party[6];
 	int fast[100];
 	int medFast[100];
 	int medSlow[100];
@@ -109,6 +108,54 @@ public:
 	Global();
 	//~Global();
 };
+class Trainer
+{
+public:
+	string name;
+	Pokemon party[6];
+	int money;
+	int trainerID;
+	string badges[8];
+	int gender; //0 for male, 1 for female
+	string trainerClass;
+	Trainer();
+	void PrintTrainerInfo();
+};
+
+Trainer::Trainer()
+{
+	name = "Red"; //default name given
+	money = 0;
+	trainerID = rand() % 65535 + 1; //sets a trainer id between 0 - 65535;
+	for(int i= 0; i<8; i++)
+	{
+		badges[i] = "NULL";
+		if(i<6)
+		{
+		Pokemon nullPoke;
+		nullPoke.nameInternal = "NULL";
+		party[i] = nullPoke;	
+		}
+		
+	}
+	trainerClass = "USER";
+	int gender = 0; //defaults to male
+}
+
+void Trainer::PrintTrainerInfo()
+{
+	cout<<"Trainer Name: "<<name<<endl;
+	cout<<"Trainer ID: "<<trainerID<<endl;
+	cout<<"Party Pokemon: " <<endl;
+	int index =0;
+	while(party[index].nameInternal!="NULL")
+	{
+		cout<<party[index].nameInternal<<" Lv"<<party[index].stats.level<<endl;
+		index++;
+	}
+	cout<<"Money: "<<money<<endl;
+}
+
 
 
 
