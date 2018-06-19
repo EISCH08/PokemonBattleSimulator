@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
 	Pokemon pokemon1;
 	Pokemon pokemon2;
 	Trainer userTrainer;
-	
+	Trainer opponentTrainer;
 	main = CreateMoveList(main);
 	main = DexCreation(main);
 	
@@ -24,15 +24,18 @@ int main(int argc, char const *argv[])
 	for(int i =0; i<6; i++)
 	{
 		int id = rand() %150 + 1;
+		int id2 = rand() % 150 +1;
 		Pokemon newPoke;
 		newPoke = CreatePokemon(id, 36, main.pokedex, main.moveList, main.slow, main.medFast, main.medSlow, main.fast);
 		userTrainer = AssignTrainerPokemon(newPoke, userTrainer);
+		Pokemon newPoke2;
+		newPoke2 = CreatePokemon(id2, 36, main.pokedex, main.moveList, main.slow, main.medFast, main.medSlow, main.fast);
+		opponentTrainer = AssignTrainerPokemon(newPoke2, opponentTrainer);
 	}
-	userTrainer.PrintTrainerInfo();
 	// pokemon2 = CreatePokemon(9, 36, main.pokedex, main.moveList, main.slow, main.medFast, main.medSlow, main.fast);
 	// // pokemon1.PrintPokemonInfo();
 	// // pokemon2.PrintPokemonInfo();
-	// Battle(pokemon1,pokemon2);
+	Battle(userTrainer,opponentTrainer);
 
 	return 0;
 } 

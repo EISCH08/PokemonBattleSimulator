@@ -264,12 +264,10 @@ Move OpponentBattleAI(Pokemon pokemon1, Pokemon pokemon2, string trainerClass,in
 	return pokemon2.moves[index];
 }
 
-void BattleUI(Pokemon pokemon1, Pokemon pokemon2,int pageState) //prints the UI for the battle
+void BattleUI(Trainer user, Trainer oppnentTrainer,int pageState) //prints the UI for the battle
 {
-	cout<<pokemon2.nameInternal<<" Lv"<<pokemon2.stats.level<<endl<<pokemon1.status<<" HP:"<<pokemon2.stats.hpCur<<"/"<<pokemon2.stats.hp<<endl; 
-	cout<<endl<<endl<<endl;
-
-	cout<<"					"<<pokemon1.nameInternal<<" Lv"<<pokemon1.stats.level<<endl<<"					"<<pokemon1.status<<" HP:"<<pokemon1.stats.hpCur<<"/"<<pokemon1.stats.hp<<endl<<endl;
+	Pokemon pokemon1 = user.party[0];
+	Pokemon pokemon2 = oppnentTrainer.party[0];
 	bool mainBattlePage = false, fightPage =false,pokemonPage =false, bagPage =false, runText = false;
 	if(pageState ==0) //mainBattlePage
 	{
@@ -283,14 +281,15 @@ void BattleUI(Pokemon pokemon1, Pokemon pokemon2,int pageState) //prints the UI 
 		fightPage = true;
 
 	}
-	if(pageState ==2) //PokemonPage
-	{
-		pokemonPage =true;
-
-	}
-	if(pageState ==3) //BagPage
+	
+	if(pageState ==2) //BagPage
 	{
 		bagPage = true;
+
+	}
+	if(pageState ==3) //PokemonPage
+	{
+		pokemonPage =true;
 
 	}
 	if(pageState ==4) //RunText
@@ -298,6 +297,13 @@ void BattleUI(Pokemon pokemon1, Pokemon pokemon2,int pageState) //prints the UI 
 		runText = true;
 	}
 
+	if(mainBattlePage || fightPage)
+	{
+		cout<<pokemon2.nameInternal<<" Lv"<<pokemon2.stats.level<<endl<<pokemon1.status<<" HP:"<<pokemon2.stats.hpCur<<"/"<<pokemon2.stats.hp<<endl; 
+		cout<<endl<<endl<<endl;
+		cout<<"					"<<pokemon1.nameInternal<<" Lv"<<pokemon1.stats.level<<endl<<"					"<<pokemon1.status
+		<<" HP:"<<pokemon1.stats.hpCur<<"/"<<pokemon1.stats.hp<<endl<<endl;
+	}
 	
 	if(mainBattlePage)
 	{
@@ -317,7 +323,12 @@ void BattleUI(Pokemon pokemon1, Pokemon pokemon2,int pageState) //prints the UI 
 	}
 	else if(pokemonPage) //list all of the party pokemon
 	{
-		cout<<"Work in progress"<<endl;
+		int index =0;
+		while(user.party[index].nameInternal!="NULL")
+	{
+		cout<<user.party[index].nameInternal<<" Lv"<<user.party[index].stats.level<<endl;
+		index++;
+	}
 	}
 	else if(bagPage) //list all of the party pokemon
 	{
@@ -326,10 +337,12 @@ void BattleUI(Pokemon pokemon1, Pokemon pokemon2,int pageState) //prints the UI 
 	
 }
 
-void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (trainer battle atm)
+void Battle(Trainer user, Trainer oppnentTrainer) //the battle environment (trainer battle atm)
 {
 	bool run = false,first =false; //trainer decides to run
-	BattleUI(pokemon1,pokemon2,0);
+	BattleUI(user,oppnentTrainer,0);
+	Pokemon pokemon1 = user.party[0];
+	Pokemon pokemon2 = oppnentTrainer.party[0];
 	if(pokemon1.stats.speed > pokemon2.stats.speed) //decide which pokemon gets to move first
 		{
 			first = true;
@@ -360,7 +373,7 @@ void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (traine
 		switch(userInput)
 		{
 			case 1: //fight UI
-			BattleUI(pokemon1,pokemon2,userInput);
+			BattleUI(user,oppnentTrainer,userInput);
 			int moveNum;
 			cin>>moveNum;
 			switch(moveNum)
@@ -385,8 +398,9 @@ void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (traine
 				pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum-1], pokemon2);
 				break;
 				case 5:
-				BattleUI(pokemon1,pokemon2,0);
+				BattleUI(user,oppnentTrainer,0);;
 				cin>>userInput;
+				break;
 				default:
 				cout<<"not a valid input"<<endl;
 			}
@@ -394,19 +408,18 @@ void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (traine
 			break;
 
 
-			case 2: //pokemon page
-			cout<<"Work in progress"<<endl;
+			case 2: //Bag page
+			
 			cin>>userInput;
-			//BattleUI(pokemon1,pokemon2,userInput);
 			break;
 
-			case 3: //bag
-			cout<<"Work in progress"<<endl;
+			case 3: //Pokemon Page
+			BattleUI(user,oppnentTrainer,userInput);
 			cin>>userInput;
 			break;
 
 			case 4: //run
-			BattleUI(pokemon1,pokemon2,userInput);
+			BattleUI(user,oppnentTrainer,userInput);;
 			if(first)
 			{
 				run=true;
@@ -421,6 +434,11 @@ void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (traine
 			default:
 			cout<<"Not a valid option, please try again"<<endl;
 		}
+		if(run)
+		{
+		cout<<"Successfully fled from battle"<<endl;
+		return;
+		}
 		Move opponentMove = OpponentBattleAI(pokemon1,pokemon2,"BASIC",0);
 		cout<<pokemon2.name<<" USED "<<opponentMove.nameInternal<<endl;
 		pokemon1.stats.hpCur -= DamageCalc(pokemon2, opponentMove, pokemon1);
@@ -428,12 +446,8 @@ void Battle(Pokemon pokemon1, Pokemon pokemon2) //the battle environment (traine
 		
 	}
 	
-	if(run)
-	{
-		cout<<"Successfully fled from battle"<<endl;
-		return;
-	}
-	else if(pokemon1.stats.hpCur<0)
+	
+	if(pokemon1.stats.hpCur<0)
 	{
 		cout<<pokemon1.nameInternal<<" FAINTED"<<endl;
 		return;
