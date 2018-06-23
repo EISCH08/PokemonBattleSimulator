@@ -245,6 +245,15 @@ double DamageCalc(Pokemon attPoke, Move move, Pokemon defPoke)
 	}
 	return damage;
 }
+Trainer SwitchPokemon(Trainer trainer, int pokeIndex) //swaps the front poke with another to battle
+{
+	Pokemon temp;
+	temp = trainer.party[0];
+	trainer.party[0] = trainer.party[pokeIndex];
+	trainer.party[pokeIndex] = temp;
+	cout<<temp.nameInternal<<" that's enough! Go "<<trainer.party[0].nameInternal<<"!"<<endl;
+	return trainer;
+}	
 
 
 Move OpponentBattleAI(Pokemon pokemon1, Pokemon pokemon2, string trainerClass,int turn)//the AI on determining what the AI does in battle
@@ -268,7 +277,7 @@ void BattleUI(Trainer user, Trainer oppnentTrainer,int pageState) //prints the U
 {
 	Pokemon pokemon1 = user.party[0];
 	Pokemon pokemon2 = oppnentTrainer.party[0];
-	bool mainBattlePage = false, fightPage =false,pokemonPage =false, bagPage =false, runText = false;
+	bool mainBattlePage = false, fightPage =false,pokemonPage =false, bagPage =false, runText = false, pokeInfo = false, prepSwitch = false;
 	if(pageState ==0) //mainBattlePage
 	{
 	
@@ -340,7 +349,8 @@ void BattleUI(Trainer user, Trainer oppnentTrainer,int pageState) //prints the U
 void Battle(Trainer user, Trainer oppnentTrainer) //the battle environment (trainer battle atm)
 {
 	bool run = false,first =false; //trainer decides to run
-	BattleUI(user,oppnentTrainer,0);
+	int userPokes = user.NumberOfPokemon();
+	int opponentPokes = oppnentTrainer.NumberOfPokemon();
 	Pokemon pokemon1 = user.party[0];
 	Pokemon pokemon2 = oppnentTrainer.party[0];
 	if(pokemon1.stats.speed > pokemon2.stats.speed) //decide which pokemon gets to move first
@@ -364,98 +374,353 @@ void Battle(Trainer user, Trainer oppnentTrainer) //the battle environment (trai
 			}
 		}
 		int userInput;
+		BattleUI(user,oppnentTrainer,0);
 		cin>>userInput;
-	while((pokemon1.stats.hpCur > 0 && pokemon2.stats.hpCur >0) && run !=true) //while both pokemon are alive
+	while(userPokes > 0 && opponentPokes > 0)
 	{
-		bool first = true; //user pokemone goes first
-		
-
-		switch(userInput)
+		if(pokemon1.stats.hpCur<=0)
 		{
-			case 1: //fight UI
-			BattleUI(user,oppnentTrainer,userInput);
-			int moveNum;
-			cin>>moveNum;
-			switch(moveNum)
+			cout<<pokemon1.nameInternal<<" FAINTED"<<endl;
+			userPokes--;
+			user.party[0].status = "FAINTED";
+			int index = 1;
+			bool swap = false;
+			while(index<6 && !swap)
 			{
-				case 1:
-				cout<<pokemon1.name<<" USED "<<pokemon1.moves[moveNum-1].nameInternal<<endl;
-				pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum-1], pokemon2);
-				break;
-
-				case 2:
-				cout<<pokemon1.name<<" USED "<<pokemon1.moves[moveNum-1].nameInternal<<endl;
-				pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum-1], pokemon2);
-				break;
-
-				case 3: 
-				cout<<pokemon1.name<<" USED "<<pokemon1.moves[moveNum-1].nameInternal<<endl;
-				pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum-1], pokemon2);
-				break;
-
-				case 4:
-				cout<<pokemon1.name<<" USED "<<pokemon1.moves[moveNum-1].nameInternal<<endl;
-				pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum-1], pokemon2);
-				break;
-				case 5:
-				BattleUI(user,oppnentTrainer,0);;
-				cin>>userInput;
-				break;
-				default:
-				cout<<"not a valid input"<<endl;
+				if(user.party[index].status!="FAINTED") //can switch with a pokemon
+				{
+					user = SwitchPokemon(user,index);
+					swap = true;
+				}
+				else
+				{
+					index=index+1;
+				}
 			}
-			
-			break;
-
-
-			case 2: //Bag page
-			
-			cin>>userInput;
-			break;
-
-			case 3: //Pokemon Page
-			BattleUI(user,oppnentTrainer,userInput);
-			cin>>userInput;
-			break;
-
-			case 4: //run
-			BattleUI(user,oppnentTrainer,userInput);;
-			if(first)
-			{
-				run=true;
-				break;
-			}
-			else
-			{
-				cout<<"failed to run away"<<endl;
-			}
-			break;
-
-			default:
-			cout<<"Not a valid option, please try again"<<endl;
 		}
-		if(run)
+		else if(pokemon2.stats.hpCur<=0)
 		{
-		cout<<"Successfully fled from battle"<<endl;
-		return;
+			cout<<pokemon2.nameInternal<<" FAINTED"<<endl;
+			opponentPokes--;
+			user.party[0].status = "FAINTED";
+			int index = 1;
+			bool swap = false;
+			while(index<6 && !swap)
+			{
+				if(oppnentTrainer.party[index].status!="FAINTED") //can switch with a pokemon
+				{
+					oppnentTrainer = SwitchPokemon(oppnentTrainer,index);
+					swap=true;
+					
+				}
+				else
+				{
+					index=index+1;
+				}
+			}
 		}
-		Move opponentMove = OpponentBattleAI(pokemon1,pokemon2,"BASIC",0);
-		cout<<pokemon2.name<<" USED "<<opponentMove.nameInternal<<endl;
-		pokemon1.stats.hpCur -= DamageCalc(pokemon2, opponentMove, pokemon1);
+		pokemon1 = user.party[0];
+		pokemon2 = oppnentTrainer.party[0];
+			while((pokemon1.stats.hpCur > 0 && pokemon2.stats.hpCur >0) && run !=true) //while both pokemon are alive
+			{
+				  //user pokemone goes first
+				user.party[0] = pokemon1;
+				oppnentTrainer.party[0] = pokemon2;
+				
+				bool turnOver =false;
+				while(!turnOver)
+					{
+						int moveNum =0;
+						BattleUI(user,oppnentTrainer,userInput);
+						switch(userInput)
+						{
+						case 1: //fight UI
+						while(moveNum!=6 && !turnOver)
+						{
+							cin>>moveNum;
+							switch(moveNum)
+							{
+								case 1:
+								cout<<pokemon1.name<<" USED "<<pokemon1.moves[moveNum-1].nameInternal<<endl;
+								pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum-1], pokemon2);
+								turnOver = true;
+								break;
 
-		
+								case 2:
+								cout<<pokemon1.name<<" USED "<<pokemon1.moves[moveNum-1].nameInternal<<endl;
+								pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum-1], pokemon2);
+								turnOver = true;
+								break;
+
+								case 3: 
+								cout<<pokemon1.name<<" USED "<<pokemon1.moves[moveNum-1].nameInternal<<endl;
+								pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum-1], pokemon2);
+								turnOver = true;
+								break;
+
+								case 4:
+								cout<<pokemon1.name<<" USED "<<pokemon1.moves[moveNum-1].nameInternal<<endl;
+								pokemon2.stats.hpCur -= DamageCalc(pokemon1, pokemon1.moves[moveNum-1], pokemon2);
+								turnOver = true;
+								break;
+								case 5:
+								user.party[0] = pokemon1;
+								oppnentTrainer.party[0] = pokemon2;
+								BattleUI(user,oppnentTrainer,0);
+								cin>>userInput;
+								moveNum=6;
+
+								break;
+								default:
+								cout<<"not a valid input"<<endl;
+							}
+						
+						}
+						
+						break;
+
+
+						case 2: //Bag page
+						
+						break;
+
+						case 3: //Pokemon Page
+						int pokeNum;
+						cin>>pokeNum;
+						while(pokeNum!=8 && !turnOver) //wanting to swithc pokemon or view info
+						{
+							int choice =0;
+							switch(pokeNum)
+							{
+								case 1:
+								cout<<"1.POKEMON INFO"<<endl<<"2.BACK"<<endl;
+								while(choice!=3)
+								{
+									cin>>choice;
+									switch(choice)
+									{
+										case 1: //display info 
+										pokemon1.PrintPokemonInfo();
+										cout<<"1.POKEMON INFO"<<endl<<"2.BACK"<<endl;
+										break;
+
+										case 2:
+										BattleUI(user,oppnentTrainer,userInput);
+										cin>>pokeNum;
+										choice = 3;
+										break;
+
+										default:
+										cout<<"not a valid option"<<endl;
+										break;
+									}
+								}
+								
+								break;
+
+								case 2:
+								cout<<"1.Use "<<user.party[1].nameInternal<<endl<<"2.Pokemon info"<<endl<<"3.Back"<<endl;
+								while(choice!=4 && !turnOver)
+								{
+									cin>>choice;
+									switch(choice)
+									{
+										case 1:
+										user = SwitchPokemon(user,1);
+										pokemon1 = user.party[0];
+										turnOver = true;
+										break;
+
+										case 2: //display info 
+										pokemon1.PrintPokemonInfo();
+										cout<<"1.POKEMON INFO"<<endl<<"2.BACK"<<endl;
+										break;
+
+										case 3:
+										BattleUI(user,oppnentTrainer,userInput);
+										cin>>pokeNum;
+										choice = 4;
+										break;
+
+										default:
+										cout<<"not a valid option"<<endl;
+										break;
+									}
+								}
+								break;
+
+								case 3:
+								cout<<"1.Use "<<user.party[2].nameInternal<<endl<<"2.Pokemon info"<<endl<<"3.Back";
+								while(choice!=4 && !turnOver)
+								{
+									cin>>choice;
+									switch(choice)
+									{
+										case 1:
+										user = SwitchPokemon(user,2);
+										pokemon1 = user.party[0];
+										turnOver = true;
+										break;
+
+										case 2: //display info 
+										pokemon1.PrintPokemonInfo();
+										cout<<"1.POKEMON INFO"<<endl<<"2.BACK"<<endl;
+										break;
+
+										case 3:
+										BattleUI(user,oppnentTrainer,userInput);
+										cin>>pokeNum;
+										choice = 4;
+										break;
+
+										default:
+										cout<<"not a valid option"<<endl;
+										break;
+									}
+								}
+								break;
+
+								case 4:
+								cout<<"1.Use "<<user.party[3].nameInternal<<endl<<"2.Pokemon info"<<endl<<"3.Back";
+								while(choice!=4 && !turnOver)
+								{
+									cin>>choice;
+									switch(choice)
+									{
+										case 1:
+										user = SwitchPokemon(user,3);
+										pokemon1 = user.party[0];
+										turnOver = true;
+										break;
+
+										case 2: //display info 
+										pokemon1.PrintPokemonInfo();
+										cout<<"1.POKEMON INFO"<<endl<<"2.BACK"<<endl;
+										break;
+
+										case 3:
+										BattleUI(user,oppnentTrainer,userInput);
+										cin>>pokeNum;
+										choice = 4;
+										break;
+
+										default:
+										cout<<"not a valid option"<<endl;
+										break;
+									}
+								}
+								break;
+
+								case 5:
+								cout<<"1.Use "<<user.party[4].nameInternal<<endl<<"2.Pokemon info"<<endl<<"3.Back";
+								while(choice!=4 && !turnOver)
+								{
+									cin>>choice;
+									switch(choice)
+									{
+										case 1:
+										user = SwitchPokemon(user,4);
+										pokemon1 = user.party[0];
+										turnOver = true;
+										break;
+
+										case 2: //display info 
+										pokemon1.PrintPokemonInfo();
+										cout<<"1.POKEMON INFO"<<endl<<"2.BACK"<<endl;
+										break;
+
+										case 3:
+										BattleUI(user,oppnentTrainer,userInput);
+										cin>>pokeNum;
+										choice = 4;
+										break;
+
+										default:
+										cout<<"not a valid option"<<endl;
+										break;
+									}
+								}
+								break;
+
+								case 6:
+								cout<<"1.Use "<<user.party[5].nameInternal<<endl<<"2.Pokemon info"<<endl<<"3.Back";
+								while(choice!=4 && !turnOver)
+								{
+									cin>>choice;
+									switch(choice)
+									{
+										case 1:
+										user = SwitchPokemon(user,5);
+										pokemon1 = user.party[0];
+										turnOver = true;
+										break;
+
+										case 2: //display info 
+										pokemon1.PrintPokemonInfo();
+										cout<<"1.POKEMON INFO"<<endl<<"2.BACK"<<endl;
+										break;
+
+										case 3:
+										BattleUI(user,oppnentTrainer,userInput);
+										cin>>pokeNum;
+										choice = 4;
+										break;
+
+										default:
+										cout<<"not a valid option"<<endl;
+										break;
+									}
+								}
+								break;
+
+								case 7: //back
+								BattleUI(user,oppnentTrainer,0);
+								cin>>userInput;
+								pokeNum = 8;
+								break;
+
+								default:
+								cout<<"Not a valid input"<<endl;
+							}
+						}
+						break;
+
+						case 4: //run
+						user.party[0] = pokemon1;
+						oppnentTrainer.party[0] = pokemon2;
+						BattleUI(user,oppnentTrainer,userInput);
+						if(first)
+						{
+							run=true;
+						}
+						else
+						{
+							cout<<"failed to run away"<<endl;
+						}
+						break;
+
+						default:
+						cout<<"Not a valid option, please try again"<<endl;
+						break;
+					}
+
+					if(run)
+					{
+						cout<<"Successfully fled from battle"<<endl;
+						turnOver = true;
+						return;
+					}
+					
+					
+				}
+				Move opponentMove = OpponentBattleAI(pokemon1,pokemon2,"BASIC",0);
+				cout<<pokemon2.nameInternal<<" USED "<<opponentMove.nameInternal<<endl;
+				pokemon1.stats.hpCur -= DamageCalc(pokemon2, opponentMove, pokemon1);
+				
+		}
 	}
-	
-	
-	if(pokemon1.stats.hpCur<0)
-	{
-		cout<<pokemon1.nameInternal<<" FAINTED"<<endl;
-		return;
-	}
-	else if(pokemon2.stats.hpCur<0)
-	{
-		cout<<pokemon2.nameInternal<<" FAINTED"<<endl;
-		return;
-	}
-	
+
 }
+	
+	
+	

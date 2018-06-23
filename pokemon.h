@@ -120,6 +120,7 @@ public:
 	string trainerClass;
 	Trainer();
 	void PrintTrainerInfo();
+	int NumberOfPokemon();
 };
 
 Trainer::Trainer()
@@ -154,6 +155,16 @@ void Trainer::PrintTrainerInfo()
 		index++;
 	}
 	cout<<"Money: "<<money<<endl;
+}
+
+int Trainer::NumberOfPokemon()
+{
+	int index =0;
+	while(party[index].nameInternal!="NULL")
+	{
+		index++;
+	}
+	return index;
 }
 
 
